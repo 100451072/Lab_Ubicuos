@@ -1,0 +1,28 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  background-color:antiquewhite;
+}
+
+#map { 
+    height: 180px; 
+    width: 200px
+}
+
+#title {
+  text-align:center; 
+  font-size:50px; 
+  text-transform:uppercase; 
+  color:#222; 
+  letter-spacing:1px;
+  font-family:"Playfair Display", serif; 
+  font-weight:400;
+}
+
+.visible {
+  display: block
+}
+
+.hidden {
+  display:none;
+}
