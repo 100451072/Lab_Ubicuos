@@ -12,7 +12,7 @@ let CIRCLE = [];
     // Para interactuar con el mapa, con diferentes eventos
     // map.once() ==> Para ejecutar una vez
     map.on('click', onMapClickCircle);
-    map.on('keydown', onMapKeyDown)
+    //map.on('keydown', onMapKeyDown)
     // Establecer la localizacion del mapa 
     map.locate({setView: true, maxZoom: 8});    
 })()
@@ -36,10 +36,9 @@ function onMapClickMarker(e) {
         .openPopup();
 }
 
-function onMapKeyDown(e) {
-    if (event.key === "q") {
-        // Eliminacion de circulo
+function onMapKeyDown() {
+    // Eliminacion de circulo
+    if (CIRCLE.length !== 0)
         CIRCLE.pop().remove();
         console.log(CIRCLE);
-    }
 }
