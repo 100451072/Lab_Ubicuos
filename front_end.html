@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inemuri</title>
+    <!--CSS-->
+    <link rel="stylesheet" href="style.css"></link>
     <!--Leaflet-->
     <!--CSS-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
@@ -17,7 +19,9 @@
 </head>
 <body>
     <h1 id="title"> INEMURI </h1>
-    <div id="map" class="map map-home leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" style="height: 300px; margin-top: 50px; position: relative;" tabindex="0">
+    <p> Presione para borrar la ultima posicion seleccionada</p>
+    <button onclick="onMapKeyDown">Borrar</button>
+    <div id="map" class="map map-home leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" >
     </div>
     <!--Buena practica poner el codigo al final del body-->
     <script src="leaflet.js">

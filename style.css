@@ -1,12 +1,14 @@
 html, body {
   height: 100%;
   width: 100%;
-  background-color:antiquewhite;
+  background-color:lightgoldenrodyellow;
 }
 
 #map { 
-    height: 180px; 
-    width: 200px
+    height: 600px; 
+    /* 99% para que no colisione con la barra de scroll*/
+    width: 99%;
+    position: relative;
 }
 
 #title {
