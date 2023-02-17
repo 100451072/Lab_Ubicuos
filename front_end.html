@@ -18,9 +18,24 @@
      crossorigin=""></script>
 </head>
 <body>
-    <h1 id="title"> INEMURI </h1>
-    <p> Presione para borrar la ultima posicion seleccionada</p>
-    <button onclick="onMapKeyDown()">Borrar</button>
+    <div>
+        <h1 id="title"> INEMURI </h1>
+    </div>
+    <form>
+    <!--Para definir el radio del circulo-->
+    <div>
+        <label for="radius">Introduzca radio del circulo para despertar:</label>
+        <input class="barra_texto" type="text" id="radius" name="cradius" placeholder="Valores enteros"/>
+    </div>
+    <div>
+        <button class="boton" role="boton" onclick="radiusDefine()">Aceptar</button>
+    </div>
+    </form>
+    <div>
+        <!--Para borrar localizaciones del mapa-->
+        <p> Presione para borrar la ultima posicion seleccionada</p>
+        <button class="boton" role="boton" onclick="onMapKeyDown()">Borrar</button>
+    </div>
     <div id="map" class="map map-home leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" >
     </div>
     <!--Buena practica poner el codigo al final del body-->

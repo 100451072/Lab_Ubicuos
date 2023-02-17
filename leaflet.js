@@ -1,4 +1,6 @@
 let CIRCLE = [];
+let MARKER = [];
+let RADIUS = 500;
 
 (function initialize() {
     // Init varibles
@@ -20,15 +22,20 @@ let CIRCLE = [];
 // Captura de evento: click
 function onMapClickCircle(e) {
     // Creacion de circulo
-    console.log(CIRCLE)
     CIRCLE.push(L.circle(e.latlng, {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.5,
-        radius: 1000
+        radius: RADIUS
     }).addTo(map))
+    // Y un marcador
+    MARKER.push(L.marker(e.latlng).addTo(map)
+        .bindPopup('Destino')
+        .openPopup())
+    console.log(CIRCLE)
 }
 
+// Solo poner marcador --> No utilizada
 function onMapClickMarker(e) {
     // Pop-up para mostrar info en el mapa
     marker = L.marker(e.latlng).addTo(map)
@@ -36,9 +43,28 @@ function onMapClickMarker(e) {
         .openPopup();
 }
 
+// BOTONES
+// Para definir el radio del circulo
+function radiusDefine() {
+    let valor = document.getElementById("radius").value;
+    valor = parseInt(valor);
+
+    // Comprbar si el valor es valido
+    if (isNaN(valor)) {
+        alert("Introduce un valor valido")
+    }
+    else {
+        RADIUS = valor;
+        console.log(RADIUS);
+    }
+}
+
+// Para borra localizaciones asingadas
 function onMapKeyDown() {
     // Eliminacion de circulo
-    if (CIRCLE.length !== 0)
+    if (CIRCLE.length !== 0 && MARKER.length !== 0){
         CIRCLE.pop().remove();
+        MARKER.pop().remove();
         console.log(CIRCLE);
+    }
 }
