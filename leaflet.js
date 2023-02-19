@@ -1,7 +1,8 @@
 let CIRCLE = [];
 let MARKER = [];
 // Ponemos coordenadas de base par evitar fallos
-let POSITION = [0,0]; // 40.4165000, -3.7025600
+let POSITION = [40.4165000, -3.7025600];
+getPosition();
 let RADIUS = 500;
 
 // Generacion del mapa
@@ -26,10 +27,10 @@ let RADIUS = 500;
     //map.locate({setView: true, maxZoom: 8});    
 })()
 
+
 // GEOLOCALIZACION
 function getPosition() {
-    let pos = [0,0];
-    if (navigator.geolocation) {
+   if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 // Si POSITION tiene un valor lo vaciamos
@@ -49,7 +50,6 @@ function getPosition() {
     else {
         console.log("No tiene la extension gealocation instalada");
     }
-    return pos;
 }
 
 
