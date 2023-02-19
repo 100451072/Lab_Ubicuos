@@ -1,10 +1,17 @@
 let CIRCLE = [];
 let MARKER = [];
+// Ponemos coordenadas de base par evitar fallos
+let POSITION = [0,0]; // 40.4165000, -3.7025600
 let RADIUS = 500;
 
+// Generacion del mapa
 (function initialize() {
     // Init varibles
-    map = L.map('map').setView([51.505, -0.09], 0);
+    getPosition();
+    console.log(POSITION);
+    map = L.map('map').setView(POSITION, 10);
+    console.log("FUera");
+    console.log(POSITION);
 
     // Establecemos el mapa
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -16,9 +23,37 @@ let RADIUS = 500;
     map.on('click', onMapClickCircle);
     //map.on('keydown', onMapKeyDown)
     // Establecer la localizacion del mapa 
-    map.locate({setView: true, maxZoom: 8});    
+    //map.locate({setView: true, maxZoom: 8});    
 })()
 
+// GEOLOCALIZACION
+function getPosition() {
+    let pos = [0,0];
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                // Si POSITION tiene un valor lo vaciamos
+                if (POSITION.length !== 0) {
+                    POSITION = [];
+                }
+                // Añadiimos la nueva poscion
+                POSITION.push(position.coords.latitude, position.coords.longitude);
+                console.log("Dentro");
+                console.log(POSITION);
+            },
+            (error) => {
+                console.log("No se pudo obtener la localizacion del usuario");
+            }
+        )
+    }
+    else {
+        console.log("No tiene la extension gealocation instalada");
+    }
+    return pos;
+}
+
+
+// EVENTOS
 // Captura de evento: click
 function onMapClickCircle(e) {
     // radio aleatorio
