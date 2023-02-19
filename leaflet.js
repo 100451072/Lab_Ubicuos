@@ -21,6 +21,8 @@ let RADIUS = 500;
 
 // Captura de evento: click
 function onMapClickCircle(e) {
+    // radio aleatorio
+    // let random = Math.floor(Math.random() * 100) + 1;
     // Creacion de circulo
     CIRCLE.push(L.circle(e.latlng, {
         color: 'red',
@@ -46,16 +48,16 @@ function onMapClickMarker(e) {
 // BOTONES
 // Para definir el radio del circulo
 function radiusDefine() {
+    event.preventDefault();
     let valor = document.getElementById("radius").value;
     valor = parseInt(valor);
 
     // Comprbar si el valor es valido
     if (isNaN(valor)) {
-        alert("Introduce un valor valido")
+        alert("Introduce un valor valido");
     }
     else {
         RADIUS = valor;
-        console.log(RADIUS);
     }
 }
 
