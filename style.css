@@ -1,11 +1,15 @@
 html, body {
   height: 100%;
   width: 100%;
-  background-color:lightgoldenrodyellow;
+  background-color: #75aa69;
+}
+
+#p, #label {
+  color:#011d1c; 
 }
 
 #map { 
-    height: 600px; 
+    height: 320px; 
     /* 99% para que no colisione con la barra de scroll*/
     width: 99%;
     position: relative;
@@ -15,8 +19,9 @@ html, body {
   text-align:center; 
   font-size:50px; 
   text-transform:uppercase; 
-  color:#222; 
+  color:#011d1c; 
   letter-spacing:1px;
+  text-decoration: underline;
   font-family:"Playfair Display", serif; 
   font-weight:400;
 }
@@ -27,11 +32,11 @@ html, body {
 
 .boton {
   appearance: none;
-  background-color: #000000;
-  border: 2px solid #1A1A1A;
+  background-color: #0c8861;
+  border: 2px solid #c99941;
   border-radius: 15px;
   box-sizing: border-box;
-  color: #FFFFFF;
+  color: #011d1c;
   cursor: pointer;
   display: inline-block;
   font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
@@ -49,7 +54,7 @@ html, body {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  width: 20%;
+  width: 30%;
   will-change: transform;
 }
 
