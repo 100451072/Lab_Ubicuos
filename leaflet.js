@@ -1,49 +1,43 @@
+let MAP;
 let CIRCLE = [];
 let MARKER = [];
 // Ponemos coordenadas de base par evitar fallos
-let POSITION = [40.4165000, -3.7025600];
-getPosition();
+let POSITION = [40.4165000, -3.7025600]; // Funciona con promesas, por lo que puede tardar en cargar
 let RADIUS = 500;
+ZOOM = 10;
+
 
 // Generacion del mapa
-(function initialize() {
+function initializeMap() {
     // Init varibles
-    getPosition();
-    console.log(POSITION);
-    map = L.map('map').setView(POSITION, 10);
-    console.log("FUera");
-    console.log(POSITION);
+    MAP = L.map('map').setView(POSITION, ZOOM);
 
     // Establecemos el mapa
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    }).addTo(MAP);
 
     // Para interactuar con el mapa, con diferentes eventos
-    // map.once() ==> Para ejecutar una vez
-    map.on('click', onMapClickCircle);
-    //map.on('keydown', onMapKeyDown)
-    // Establecer la localizacion del mapa 
-    //map.locate({setView: true, maxZoom: 8});    
-})()
-
+    MAP.on('click', onMapClickCircle);
+}
 
 // GEOLOCALIZACION
 function getPosition() {
    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
+        navigator.geolocation.watchPosition(
             (position) => {
-                // Si POSITION tiene un valor lo vaciamos
-                if (POSITION.length !== 0) {
-                    POSITION = [];
-                }
                 // Añadiimos la nueva poscion
-                POSITION.push(position.coords.latitude, position.coords.longitude);
-                console.log("Dentro");
-                console.log(POSITION);
+                POSITION[0] = position.coords.latitude
+                POSITION[1] = position.coords.longitude;
+                MAP.setView(POSITION, ZOOM);
             },
             (error) => {
                 console.log("No se pudo obtener la localizacion del usuario");
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 30000,
+                timeout: 30000
             }
         )
     }
@@ -64,9 +58,9 @@ function onMapClickCircle(e) {
         fillColor: '#f03',
         fillOpacity: 0.5,
         radius: RADIUS
-    }).addTo(map))
+    }).addTo(MAP))
     // Y un marcador
-    MARKER.push(L.marker(e.latlng).addTo(map)
+    MARKER.push(L.marker(e.latlng).addTo(MAP)
         .bindPopup('Destino')
         .openPopup())
     console.log(CIRCLE)
@@ -75,7 +69,7 @@ function onMapClickCircle(e) {
 // Solo poner marcador --> No utilizada
 function onMapClickMarker(e) {
     // Pop-up para mostrar info en el mapa
-    marker = L.marker(e.latlng).addTo(map)
+    marker = L.marker(e.latlng).addTo(MAP)
         .bindPopup('Destino')
         .openPopup();
 }
@@ -105,3 +99,7 @@ function onMapKeyDown() {
         console.log(CIRCLE);
     }
 }
+
+// MAIN
+initializeMap();
+getPosition();
