@@ -1,6 +1,6 @@
 let MAP;
-let CIRCLE = [];
-let MARKER = [];
+let CIRCLES = [];
+let MARKERS = [];
 // Ponemos coordenadas de base par evitar fallos
 let POSITION = [40.4165000, -3.7025600]; // Funciona con promesas, por lo que puede tardar en cargar
 let RADIUS = 500;
@@ -29,7 +29,11 @@ function getPosition() {
                 // Añadiimos la nueva poscion
                 POSITION[0] = position.coords.latitude
                 POSITION[1] = position.coords.longitude;
+                console.log("you are here", POSITION);
+                // Cambiamos pos en el mapa
                 MAP.setView(POSITION, ZOOM);
+                // Checkeamos si hemos llegado al destino
+                cheackearDestino();
             },
             (error) => {
                 console.log("No se pudo obtener la localizacion del usuario");
@@ -46,6 +50,22 @@ function getPosition() {
     }
 }
 
+// CHECKEAR LLEGADA
+function cheackearDestino() {
+    if (CIRCLES.length !== 0) {
+        // Recorremos las posiciones marcadas
+        for (destino of CIRCLES) {
+            console.log(destino);
+            if (destino.getBounds().contains(POSITION)) {
+                console.log("BRRRRRR");
+                window.navigator.vibrate(200);
+            }
+            else {
+                console.log("NOT brrr");
+            }
+        }
+    }
+}
 
 // EVENTOS
 // Captura de evento: click
@@ -53,17 +73,17 @@ function onMapClickCircle(e) {
     // radio aleatorio
     // let random = Math.floor(Math.random() * 100) + 1;
     // Creacion de circulo
-    CIRCLE.push(L.circle(e.latlng, {
+    CIRCLES.push(L.circle(e.latlng, {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.5,
         radius: RADIUS
     }).addTo(MAP))
     // Y un marcador
-    MARKER.push(L.marker(e.latlng).addTo(MAP)
+    MARKERS.push(L.marker(e.latlng).addTo(MAP)
         .bindPopup('Destino')
         .openPopup())
-    console.log(CIRCLE)
+    console.log(CIRCLES)
 }
 
 // Solo poner marcador --> No utilizada
@@ -93,13 +113,14 @@ function radiusDefine() {
 // Para borra localizaciones asingadas
 function onMapKeyDown() {
     // Eliminacion de circulo
-    if (CIRCLE.length !== 0 && MARKER.length !== 0){
-        CIRCLE.pop().remove();
-        MARKER.pop().remove();
-        console.log(CIRCLE);
+    if (CIRCLES.length !== 0 && MARKERS.length !== 0){
+        CIRCLES.pop().remove();
+        MARKERS.pop().remove();
+        console.log(CIRCLES);
     }
 }
 
 // MAIN
 initializeMap();
 getPosition();
+cheackearDestino();
