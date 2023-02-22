@@ -34,9 +34,18 @@
     <div>
         <!--Para borrar localizaciones del mapa-->
         <p> Presione para borrar la ultima posicion seleccionada</p>
-        <button class="boton" role="boton" onclick="onMapKeyDown()">Borrar</button>
+        <button class="boton" role="boton" onclick="deleteLastMarker()">Borrar</button>
     </div>
     <div id="map" class="map map-home leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" >
+    </div>
+    <div id="marcadores_ocultos">
+        <!--Finalizar viaje (inicialmente no visible)-->
+        <!--Finalizar viaje-->
+        <p> Finalizar vieje</p>
+        <button class="boton" role="boton" onclick="deleteAllMarkers()">Finalizar</button>
+         <!--Retirar marcador alcanzado-->
+        <p> Retirar marcador alcanzado</p>
+        <button class="boton" role="boton" onclick="deleteVisitedMarker()">Borrar</button>
     </div>
     <!--Buena practica poner el codigo al final del body-->
     <script src="leaflet.js">

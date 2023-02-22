@@ -1,11 +1,12 @@
 let MAP;
-let IMAGE;
+let INIT_POS;
+let LAST_POS_ID = -1;
 let CIRCLES = [];
 let MARKERS = [];
 // Ponemos coordenadas de base par evitar fallos
 let POSITION = [40.4165000, -3.7025600]; // Funciona con promesas, por lo que puede tardar en cargar
 let RADIUS = 500;
-ZOOM = 10;
+let ZOOM = 10;
 
 
 // Generacion del mapa
@@ -19,11 +20,15 @@ function initializeMap() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(MAP);
 
-    // Imagen de usuario
-    IMAGE = L.imageOverlay(image_url, [POSITION, [POSITION[0]-0.07, POSITION[1]+0.07]]).addTo(MAP);
+    // Imagen de pos usuario
+    icono = L.icon({iconUrl: image_url, iconSize: [32, 32]});
+    INIT_POS = L.marker(POSITION, {icon: icono}).addTo(MAP);
 
     // Para interactuar con el mapa, con diferentes eventos
+    // Click de raton o pantalla movil
     MAP.on('click', onMapClickCircle);
+    // En caso de realizar zoom actualizamos su valor
+    MAP.on('zoomend', onMapZoomUpdate);
 }
 
 // GEOLOCALIZACION
@@ -34,11 +39,10 @@ function getPosition() {
                 // Añadiimos la nueva poscion
                 POSITION[0] = position.coords.latitude
                 POSITION[1] = position.coords.longitude;
-                console.log("you are here", POSITION);
                 // Cambiamos pos en el mapa
                 MAP.setView(POSITION, ZOOM);
                 // Dibujamos el icono del usuario
-                IMAGE.setBounds([POSITION, [POSITION[0]-0.07, POSITION[1]+0.07]]);
+                INIT_POS.setLatLng(POSITION);
                 // Checkeamos si hemos llegado al destino
                 cheackearDestino();
             },
@@ -59,17 +63,22 @@ function getPosition() {
 
 // CHECKEAR LLEGADA
 function cheackearDestino() {
-    if (CIRCLES.length !== 0) {
+    if (CIRCLES.length > 0) {
+        // Para localizar el marcador y circulo colisionados
+        let id = 0;
         // Recorremos las posiciones marcadas
         for (destino of CIRCLES) {
             console.log(destino);
             if (destino.getBounds().contains(POSITION)) {
+                // Asignamos el id para saber cual es el utlimo visitado
+                LAST_POS_ID = id;
+                console.log(LAST_POS_ID);
+                // Mostrar Mensaje finalizacion
+
                 console.log("BRRRRRR");
                 window.navigator.vibrate([200, 100, 300]);
             }
-            else {
-                console.log("NOT brrr");
-            }
+            id++;
         }
     }
 }
@@ -77,8 +86,6 @@ function cheackearDestino() {
 // EVENTOS
 // Captura de evento: click
 function onMapClickCircle(e) {
-    // radio aleatorio
-    // let random = Math.floor(Math.random() * 100) + 1;
     // Creacion de circulo
     CIRCLES.push(L.circle(e.latlng, {
         color: 'red',
@@ -90,7 +97,14 @@ function onMapClickCircle(e) {
     MARKERS.push(L.marker(e.latlng).addTo(MAP)
         .bindPopup('Destino')
         .openPopup())
-    console.log(CIRCLES)
+    //console.log(CIRCLES)
+}
+
+// Captura de evento: zoom
+function onMapZoomUpdate(e) {
+    // Asignar el nuevo valor
+    ZOOM = MAP.getZoom();
+    //console.log("zoom", ZOOM);
 }
 
 // Solo poner marcador --> No utilizada
@@ -118,12 +132,41 @@ function radiusDefine() {
 }
 
 // Para borra localizaciones asingadas
-function onMapKeyDown() {
+function deleteLastMarker() {
     // Eliminacion de circulo
-    if (CIRCLES.length !== 0 && MARKERS.length !== 0){
+    if (CIRCLES.length > 0 && MARKERS.length > 0){
         CIRCLES.pop().remove();
         MARKERS.pop().remove();
-        console.log(CIRCLES);
+        //console.log(CIRCLES);
+    }
+}
+
+// Para borrar todos los marcadores existentes
+function deleteAllMarkers() {
+    let len = CIRCLES.length
+    // Borrar todos los marcadores existentes
+    while (len > 0) {
+        // Llamamos a la funcion que borra el ultimo marcador
+        deleteLastMarker();
+        len--;
+    }
+}
+
+// Para borrar el marcador visitado
+function deleteVisitedMarker() {
+    // En caso de que un marcador haya sido localizado
+    if (LAST_POS_ID >= 0) {
+        // Pasamos el marcador al final de la lista 
+        let last_circle = CIRCLES.splice(LAST_POS_ID, 1)[0];
+        let last_marker = MARKERS.splice(LAST_POS_ID, 1)[0];
+        CIRCLES.push(last_circle);
+        MARKERS.push(last_marker);
+        // Llamamos a la funcion que borra el ultimo elemento
+        deleteLastMarker();
+        // Para no borrar el ultimo id borrado devolvemosel valor a nulo
+        LAST_POS_ID = -1;
+    } else {
+        console.log("No has visitado ningun marcador");
     }
 }
 
