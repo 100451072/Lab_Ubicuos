@@ -1,4 +1,5 @@
 let MAP;
+let IMAGE;
 let CIRCLES = [];
 let MARKERS = [];
 // Ponemos coordenadas de base par evitar fallos
@@ -10,12 +11,16 @@ ZOOM = 10;
 // Generacion del mapa
 function initializeMap() {
     // Init varibles
+    image_url = "https://cdn-icons-png.flaticon.com/512/188/188463.png";
     MAP = L.map('map').setView(POSITION, ZOOM);
 
     // Establecemos el mapa
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(MAP);
+
+    // Imagen de usuario
+    IMAGE = L.imageOverlay(image_url, [POSITION, [POSITION[0]-0.07, POSITION[1]+0.07]]).addTo(MAP);
 
     // Para interactuar con el mapa, con diferentes eventos
     MAP.on('click', onMapClickCircle);
@@ -32,6 +37,8 @@ function getPosition() {
                 console.log("you are here", POSITION);
                 // Cambiamos pos en el mapa
                 MAP.setView(POSITION, ZOOM);
+                // Dibujamos el icono del usuario
+                IMAGE.setBounds([POSITION, [POSITION[0]-0.07, POSITION[1]+0.07]]);
                 // Checkeamos si hemos llegado al destino
                 cheackearDestino();
             },
@@ -58,7 +65,7 @@ function cheackearDestino() {
             console.log(destino);
             if (destino.getBounds().contains(POSITION)) {
                 console.log("BRRRRRR");
-                window.navigator.vibrate(200);
+                window.navigator.vibrate([200, 100, 300]);
             }
             else {
                 console.log("NOT brrr");
@@ -123,4 +130,3 @@ function onMapKeyDown() {
 // MAIN
 initializeMap();
 getPosition();
-cheackearDestino();
