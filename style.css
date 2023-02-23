@@ -30,6 +30,10 @@ html, body {
   size: 30;
 }
 
+#marcadores_ocultos {
+  display: none;
+}
+
 .boton {
   appearance: none;
   background-color: #0c8861;

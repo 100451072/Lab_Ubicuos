@@ -32,6 +32,9 @@ function initializeMap() {
 }
 
 // GEOLOCALIZACION
+// IMPORTATNTE: la localizacion se checkea cuando se cambia de pos
+// debugueando en chrome no detecto si pones un circulo en tu pos sin moverte
+// en una situacion real si que lo detectaria ya que variarias tu posicio constantemente
 function getPosition() {
    if (navigator.geolocation) {
         navigator.geolocation.watchPosition(
@@ -68,14 +71,12 @@ function cheackearDestino() {
         let id = 0;
         // Recorremos las posiciones marcadas
         for (destino of CIRCLES) {
-            console.log(destino);
             if (destino.getBounds().contains(POSITION)) {
                 // Asignamos el id para saber cual es el utlimo visitado
                 LAST_POS_ID = id;
-                console.log(LAST_POS_ID);
                 // Mostrar Mensaje finalizacion
-
-                console.log("BRRRRRR");
+                finalizaction("block");
+                // console.log("BRRRRRR");
                 window.navigator.vibrate([200, 100, 300]);
             }
             id++;
@@ -148,8 +149,14 @@ function deleteAllMarkers() {
     while (len > 0) {
         // Llamamos a la funcion que borra el ultimo marcador
         deleteLastMarker();
+        // Borramos los botones de fin
+        finalizaction("none");
         len--;
     }
+    // Reseteamos todos los valores a su pos de inicio
+    ZOOM = 10;
+    RADIUS = 500;
+    MAP.setView(POSITION, ZOOM);
 }
 
 // Para borrar el marcador visitado
@@ -163,11 +170,21 @@ function deleteVisitedMarker() {
         MARKERS.push(last_marker);
         // Llamamos a la funcion que borra el ultimo elemento
         deleteLastMarker();
-        // Para no borrar el ultimo id borrado devolvemosel valor a nulo
+        // Borramos los botones fin
+        finalizaction("none");
+        // Para evitar errores devolvemos el valor a nulo
         LAST_POS_ID = -1;
     } else {
         console.log("No has visitado ningun marcador");
     }
+}
+
+// MOSTAR BOTONES DE FINALIZACION
+function finalizaction(style) {
+    // Funcion para mostar marcadores en caso de fin
+    // y ocultarolos de nuevo cuando se pulse un boton
+    let elemento = document.getElementById("marcadores_ocultos");
+    elemento.style.display = style;
 }
 
 // MAIN
